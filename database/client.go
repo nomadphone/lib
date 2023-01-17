@@ -13,7 +13,7 @@ import (
 func GetClient() (*mongo.Client, context.Context, context.CancelFunc) {
 	serverAPIOptions := options.ServerAPI(options.ServerAPIVersion1)
 	dbUri := fmt.Sprintf(
-		"mongodb+srv://%s:%s@%s/?retryWrites=true&w=majority",
+		"mongodb+srv://%s:%s@%s/?retryWrites=true&w=majority&ssl=true",
 		os.Getenv("MONGO_USERNAME"),
 		os.Getenv("MONGO_PASSWORD"),
 		os.Getenv("MONGO_HOST"),
@@ -26,5 +26,10 @@ func GetClient() (*mongo.Client, context.Context, context.CancelFunc) {
 	if err != nil {
 		panic(err)
 	}
+	if err = client.Ping(context.TODO(), nil); err != nil {
+		fmt.Println("ping failed!")
+		panic(err)
+	}
+	fmt.Println("ping successful!")
 	return client, ctx, cancel
 }
