@@ -16,10 +16,11 @@ func GetClient() (*mongo.Client, context.Context, context.CancelFunc) {
 	host := os.Getenv("MONGO_HOST")
 	log.Println("Connecting on host", host)
 	dbUri := fmt.Sprintf(
-		"mongodb+srv://%s:%s@%s/?retryWrites=true&w=majority&ssl=true",
+		"mongodb+srv://%s:%s@%s/?retryWrites=true&w=majority%s",
 		os.Getenv("MONGO_USERNAME"),
 		os.Getenv("MONGO_PASSWORD"),
 		host,
+		os.Getenv("MONGO_CONNECTION_OPTIONS"),
 	)
 	clientOptions := options.Client().
 		ApplyURI(dbUri).
